@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ContactAddressService"
+    targetNamespace="http://example.com/contact_address"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="http://example.com/contact_address"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Tipe Data -->
+    <types>
+        <xsd:schema targetNamespace="http://example.com/contact_address">
+            <!-- Contact -->
+            <xsd:element name="Contact">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="id" type="xsd:int"/>
+                        <xsd:element name="name" type="xsd:string"/>
+                        <xsd:element name="phone" type="xsd:string"/>
+                        <xsd:element name="email" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            
+            <!-- Address -->
+            <xsd:element name="Address">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="id" type="xsd:int"/>
+                        <xsd:element name="street" type="xsd:string"/>
+                        <xsd:element name="city" type="xsd:string"/>
+                        <xsd:element name="country" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <!-- Pesan -->
+    <message name="getContactRequest">
+        <part name="contact_id" type="xsd:int"/>
+    </message>
+    <message name="getContactResponse">
+        <part name="contact" element="tns:Contact"/>
+    </message>
+
+    <message name="createAddressRequest">
+        <part name="address" element="tns:Address"/>
+    </message>
+    <message name="createAddressResponse">
+        <part name="status" type="xsd:string"/>
+    </message>
+
+    <!-- Port Type -->
+    <portType name="ContactAddressPortType">
+        <operation name="getContact">
+            <input message="tns:getContactRequest"/>
+            <output message="tns:getContactResponse"/>
+        </operation>
+        <operation name="createAddress">
+            <input message="tns:createAddressRequest"/>
+            <output message="tns:createAddressResponse"/>
+        </operation>
+    </portType>
+
+    <!-- Binding -->
+    <binding name="ContactAddressBinding" type="tns:ContactAddressPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getContact">
+            <soap:operation soapAction="getContact"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="createAddress">
+            <soap:operation soapAction="createAddress"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- Service -->
+    <service name="ContactAddressService">
+        <port name="ContactAddressPort" binding="tns:ContactAddressBinding">
+            <soap:address location="http://localhost:8000/soap_service"/>
+        </port>
+    </service>
+</definitions>
